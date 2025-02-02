@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forgot Password</title>
+    <link rel="stylesheet" href="signin.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="#" class="navbar-logo">
+                <img src="logo.png" alt="Chronos Learning Logo" class="logo">
+                <span>Chronos Learning</span>
+            </a>
+            <ul class="navbar-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="EnrollCourses.html">Enroll Courses</a></li>
+                <li><a href="signup.html">Sign Up</a></li>
+                <li><a href="signin.html">Sign In</a></li>
+            </ul>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <h1>Forgot Password</h1>
+            <p>Enter your CNIC to reset your password.</p>
+        </div>
+        <div class="forgot-box">
+            <form onsubmit="return handleForgotPassword(event)">
+                <label for="cnic">CNIC</label>
+                <input type="text" id="cnic" name="cnic" placeholder="XXXXX-XXXXXXX-X" required>
+
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function handleForgotPassword(event) {
+            event.preventDefault();
+    
+            const cnicInput = document.getElementById("cnic").value;
+            const cnicPattern = /^\d{5}-\d{7}-\d{1}$/; 
+    
+            if (!cnicPattern.test(cnicInput)) {
+                alert("Invalid CNIC format. Please use XXXXX-XXXXXXX-X.");
+                return false;
+            }
+    
+            window.location.href = "index.html";
+            return true;
+        }
+    </script>
+    
+    
+</body>
+</html>

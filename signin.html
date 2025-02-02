@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CHRONOS LEARNING - Sign In</title>
+    <link rel="stylesheet" href="signin.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="#" class="navbar-logo">
+                <img src="logo.png" alt="Chronos Learning Logo" class="logo">
+                <span>Chronos Learning</span>
+            </a>
+            <ul class="navbar-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="signup.html">Sign Up</a></li>
+                <li><a href="signin.html">Sign In</a></li>
+            </ul>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="header">
+            <img src="logo.png" alt="Chronos Learning Logo" class="logo">
+            <h1>CHRONOS LEARNING - Sign In</h1>
+        </div>
+        <div class="login-box">
+            <form onsubmit="return SignIn(event)">
+                <label for="email">Email</label>
+                <input type="text" id="email" name="email" required>
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+
+                <button type="submit">Sign In</button>
+
+                <div class="links">
+                    <a href="signup.html">New to Learning Management? Sign up</a>
+                    <a href="forgot.html">Forgot Password?</a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        async function SignIn(event) {
+            event.preventDefault();
+    
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+    
+            try {
+                const response = await fetch("http://localhost:3000/login", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({ email, password }),
+                });
+    
+                const data = await response.json();
+                if (response.ok) {
+                    alert(data.message);
+                    window.location.href = "index.html"; 
+                } else {
+                    alert(data.error);
+                }
+            } catch (error) {   
+                console.error("Error connecting to the server:", error);
+                alert("Error connecting to the server. Please try again later.");
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up - Chronos Learning</title>
+    <link rel="stylesheet" href="signup.css">
+</head>
+<body>
+<nav class="navbar">
+    <div class="navbar-container">
+        <a href="#" class="navbar-logo">
+            <img src="logo.png" alt="Chronos Learning Logo" class="logo">
+            <span>Chronos Learning</span>
+        </a>
+        <ul class="navbar-menu">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="signup.html">Sign Up</a></li>
+            <li><a href="signin.html">Sign In</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="container">
+    <header class="header">
+        <h1 class="project-name">CHRONOS LEARNING</h1>
+    </header>
+    <main class="form-container">
+        <h2>Create Account</h2>
+
+        <form id="signupForm" method="POST">
+            <label for="firstName">First Name *</label>
+            <input type="text" id="firstName" name="firstName" placeholder="First Name *" required>
+
+            <label for="lastName">Last Name *</label>
+            <input type="text" id="lastName" name="lastName" placeholder="Last Name *" required>
+
+            <label for="age">Age *</label>
+            <input type="number" id="age" name="age" placeholder="Age *" min="1" required>
+
+            <label for="cnic">CNIC * with -</label>
+            <input type="text" id="cnic" name="cnic" placeholder="CNIC *" pattern="\d{5}-\d{7}-\d{1}" required>
+
+            <label for="email">Email *</label>
+            <input type="email" id="email" name="email" placeholder="Email *" required>
+
+            <label for="password">Password *</label>
+            <div class="password-container">
+                <input type="password" id="password" name="password" placeholder="Password *" required>
+            </div>
+
+            <div class="submit-container">
+                <button type="submit" class="submit-button">Register</button>
+            </div>
+        </form>
+
+        <script>
+            document.getElementById('signupForm').addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const firstName = document.getElementById('firstName').value;
+                const lastName = document.getElementById('lastName').value;
+                const age = document.getElementById('age').value;
+                const cnic = document.getElementById('cnic').value;
+                const email = document.getElementById('email').value;
+                const password = document.getElementById('password').value;
+
+                try {
+                    const response = await fetch('http://localhost:3000/register', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ firstName, lastName, age, cnic, email, password }),
+                    });
+
+                    const data = await response.json();
+                    if (response.ok) {
+                        alert('User registered successfully');
+                    } else {
+                        alert(data.error);
+                    }
+                } catch (error) {
+                    alert('Error connecting to the server.');
+                }
+            });
+        </script>
+    </main>
+</div>
+</body>
+</html>

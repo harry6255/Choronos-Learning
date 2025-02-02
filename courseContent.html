@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Course Content</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="#" class="navbar-logo">
+                <img src="logo.png" alt="Chronos Learning Logo" class="logo">
+                <span>Chronos Learning</span>
+            </a>
+            <ul class="navbar-menu">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="admin.html">Add Courses</a></li>
+            </ul>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span class="bar"></span>   
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+    </nav>
+
+    <h1>Add Course Content</h1>
+
+    <form id="courseContentForm" enctype="multipart/form-data">
+        <label for="title">Course Title:</label>
+        <input type="text" id="title" name="title" required><br><br>
+
+        <label for="description">Course Description:</label>
+        <textarea id="description" name="description" required></textarea><br><br>
+
+        <label for="images">Course Images (2 images required):</label>
+        <input type="file" id="image1" name="images" accept="image/*" required><br><br>
+        <input type="file" id="image2" name="images" accept="image/*" required><br><br>
+
+        <button type="submit">Add Content</button>
+    </form>
+
+    <script>
+        document.getElementById('courseContentForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('title', document.getElementById('title').value);
+    formData.append('description', document.getElementById('description').value);
+    formData.append('images', document.getElementById('image1').files[0]);
+    formData.append('images', document.getElementById('image2').files[0]);
+
+    try {
+        const response = await fetch('http://localhost:3000/add-content', {
+            method: 'POST',
+            body: formData,
+        });
+
+        const result = await response.json();  
+
+        if (response.ok) {
+            alert('Course content added successfully!');
+        } else {
+            alert('Error: ' + result.error);
+        }
+    } catch (error) {
+        alert('Error: ' + error.message);
+    }
+});
+
+    </script>
+
+</body>
+</html>

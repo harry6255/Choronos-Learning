@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Manage Courses</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    
+    <div id="login-container" class="login-container">
+        <h1>Admin Login</h1>
+        <form id="login-form">
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+            
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+            
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <div id="admin-container" class="hidden">
+        <nav class="navbar">
+            <div class="navbar-container">
+                <a href="#" class="navbar-logo">
+                    <img src="logo.png" alt="Chronos Learning Logo" class="logo">
+                    <span>Chronos Learning</span>
+                </a>
+                <ul class="navbar-menu">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="CourseContent.html">Add Course Content</a></li>
+                </ul>
+                <div class="hamburger" onclick="toggleMenu()">
+                    <span class="bar"></span>   
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
+        </nav>
+
+        <h1>Manage Courses</h1>
+
+        <h2>Add New Course</h2>
+        <form id="add-course-form" method="POST" enctype="multipart/form-data">
+            <label for="title">Course Title:</label>
+            <input type="text" id="title" name="title" required>
+        
+            <label for="bio">Course Bio:</label>
+            <textarea id="bio" name="bio" required></textarea>
+        
+            <label for="image">Course Image:</label>
+            <input type="file" id="image" name="image" accept="image/*" required>
+        
+            <button type="submit">Add Course</button>
+        </form>
+
+        <h2>Delete Course</h2>
+        <form id="delete-course-form" method="POST">
+            <label for="delete-title">Course Title:</label>
+            <input type="text" id="delete-title" name="delete-title" required>
+        
+            <button type="submit">Delete Course</button>
+        </form>
+    </div>
+
+    <script>
+        const adminEmail = "Admin@gmail.com";
+        const adminPassword = "Admin123";
+
+        document.getElementById('login-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (email === adminEmail && password === adminPassword) {
+                alert("Login successful");
+                document.getElementById('login-container').classList.add('hidden');
+                document.getElementById('admin-container').classList.remove('hidden');
+            } else {
+                alert("Invalid credentials. Please try again.");
+            }
+        });
+
+            document.getElementById('add-course-form').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const formData = new FormData();
+            formData.append('title', document.getElementById('title').value);
+            formData.append('bio', document.getElementById('bio').value);
+            formData.append('image', document.getElementById('image').files[0]);
+
+            try {
+                const response = await fetch('http://localhost:3000/add-course', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    alert('Course added successfully');
+                } else {
+                    alert(data.error);
+                }
+            } catch (error) {
+                console.error("Error adding course:", error);
+                alert('Error adding course');
+            }
+        });
+        
+    document.getElementById('delete-course-form').addEventListener('submit', async function(event) {
+    event.preventDefault();
+
+    const title = document.getElementById('delete-title').value;
+
+    try {
+        const response = await fetch(`http://localhost:3000/delete-course/${encodeURIComponent(title)}`, {
+            method: 'DELETE',
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            alert(result.message || 'Course deleted successfully!');
+        } else {
+            alert(result.error || 'Failed to delete course.');
+        }
+    } catch (error) {
+        console.error('Error deleting course:', error);
+        alert('An error occurred while trying to delete the course.');
+    }
+    });
+
+    </script>
+
+    <style>
+        .hidden {
+            display: none;
+        }
+
+        .login-container, #admin-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+    </style>
+</body>
+</html>

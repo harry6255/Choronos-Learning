@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enroll Courses</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <nav class="navbar">
+    <div class="navbar-container">
+        <a href="#" class="navbar-logo">
+            <img src="logo.png" alt="Chronos Learning Logo" class="logo">
+            <span>Chronos Learning</span>
+        </a>
+        <ul class="navbar-menu">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="Contact.html">Contact Us</a></li>
+            <li><a href="signup.html">Sign Up</a></li>
+        </ul>
+
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search courses..." class="search-bar">
+            <button class="search-btn" onclick="searchCourses()">🔍</button>
+        </div>
+
+        <div class="hamburger" onclick="toggleMenu()">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+    </div>
+    </nav>
+
+    <header class="header hero">
+        <h1>Enroll in Your Desired Course</h1>
+        <p>Choose the best course and take a step toward your future.</p>
+    </header>
+
+    <section class="courses-section info">
+        <h2>Available Courses for Enrollment</h2>
+        <div id="enrollCoursesList" class="courses-list"></div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2024 Chronos Learning. All rights reserved.</p>
+    </footer>
+
+    <script>
+        let allCourses = [];
+
+        async function loadEnrollCourses() {
+            try {
+                const response = await fetch('http://localhost:3000/courses');
+                allCourses = await response.json();
+
+                displayCourses(allCourses);
+            } catch (error) {
+                console.error("Error loading courses:", error);
+            }
+        }
+
+        function displayCourses(courses) {
+        const enrollCoursesList = document.getElementById('enrollCoursesList');
+        enrollCoursesList.innerHTML = ''; 
+
+        courses.forEach(course => {
+        const courseElement = document.createElement('div');
+        courseElement.classList.add('course-item');
+        courseElement.innerHTML = `
+            <h3>${course.title}</h3>
+            <p>${course.bio}</p>
+            <img src="http://localhost:3000/${course.image}" alt="${course.title}" class="course-image">
+            <button class="enroll-btn" onclick="redirectToSignup()">Enroll Now</button>
+        `;
+        enrollCoursesList.appendChild(courseElement);
+        });
+    }
+
+        function redirectToSignup() {
+        window.location.href = 'signup.html';
+    }
+
+
+        function searchCourses() {
+            const searchInput = document.getElementById('searchInput').value.toLowerCase();
+            const filteredCourses = allCourses.filter(course => 
+                course.title.toLowerCase().includes(searchInput) || 
+                course.bio.toLowerCase().includes(searchInput)
+            );
+
+            displayCourses(filteredCourses);
+        }
+
+        function enrollCourse(courseId) {
+        window.location.href = `startCourse.html?courseId=${courseId}`;
+        }
+
+
+        loadEnrollCourses();
+    </script>
+</body>
+</html>

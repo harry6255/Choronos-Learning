@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Available Courses</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="#" class="navbar-logo">
+                <img src="logo.png" alt="Chronos Learning Logo" class="logo">
+                <span>Chronos Learning</span>
+            </a>
+            <ul class="navbar-menu">
+                <li><a href="enrollcourses.html">Enroll Now</a></li>
+                <li><a href="Contact.html">Contact Us</a></li>a
+                <li><a href="signup.html">Sign Up</a></li>
+                <li><a href="signin.html">Sign in</a></li>
+            </ul>
+    
+            <div class="hamburger" onclick="toggleMenu()">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+            </div>
+        </div>
+        </nav>
+
+    <header class="header hero">
+        <h1>Empower Your Future, Enroll Today!</h1>
+        <p>Discover courses designed to shape your career and expand your knowledge.</p>
+    </header>
+
+    <section class="image-section hero">
+    <div class="image-container">
+        <img src="s.jpg" alt="Male Student" class="section-image">
+        <div class="image-caption">
+            <p>"Education is the passport to the future, for tomorrow belongs to those who prepare for it today."</p>
+        </div>
+    </div>
+    <div class="image-container">
+        <img src="f.jpg" alt="Female Student" class="section-image">
+        <div class="image-caption">
+            <p>"The future depends on what you do today. Empower yourself with knowledge."</p>
+        </div>
+    </div>
+    </section>
+
+    <section class="courses-section info">
+        <h2>Available Courses</h2>
+        <div id="coursesList" class="courses-list"></div>
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2024 Chronos Learning. All rights reserved.</p>
+    </footer>
+
+    <script>
+        async function loadCourses() {
+    try {
+        const response = await fetch('http://localhost:3000/courses');
+        const courses = await response.json();
+
+        const coursesList = document.getElementById('coursesList');
+        coursesList.innerHTML = '';
+
+        courses.forEach(course => {
+            const courseElement = document.createElement('div');
+            courseElement.classList.add('course-item');
+            courseElement.innerHTML = `
+                <h3>${course.title}</h3>
+                <p>${course.bio}</p>
+                <img src="http://localhost:3000/${course.image}" alt="${course.title}" class="course-image">
+                <button class="enroll-btn" onclick="window.location.href='signup.html'">Enroll Now</button>
+            `;
+            coursesList.appendChild(courseElement);
+        });
+    } catch (error) {
+        console.error("Error loading courses:", error);
+    }
+}
+
+loadCourses();
+
+</script>
+    
+</body>
+</html>

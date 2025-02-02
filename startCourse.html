@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Start Course</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="#" class="navbar-logo">
+                <img src="logo.png" alt="Chronos Learning Logo" class="logo">
+                <span>Chronos Learning</span>
+            </a>
+            <ul class="navbar-menu">
+                <li><a href="index.html">Home</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <h1>Start Course</h1>
+    <div id="course-list">
+        <!-- Course List will be dynamically populated -->
+    </div>
+    
+    <div id="course-details" style="display: none;">
+        <h2 id="course-title"></h2>
+        <p id="course-description"></p>
+        <div id="course-images"></div>
+    </div>
+
+    <script>
+        function fetchCourseDetails(courseId) {
+            fetch(`http://localhost:3000/courses/${courseId}`)
+                .then(response => response.json())
+                .then(course => {
+                    const courseDetails = document.getElementById('course-details');
+                    courseDetails.style.display = 'block';
+                    document.getElementById('course-title').innerText = course.title;
+                    document.getElementById('course-description').innerText = course.bio;
+    
+                    const imagesContainer = document.getElementById('course-images');
+                    imagesContainer.innerHTML = '';
+                    if (course.images && course.images.length) {
+                        course.images.forEach(image => {
+                            const img = document.createElement('img');
+                            img.src = `http://localhost:3000/${image}`;
+                            img.alt = course.title;
+                            img.width = 150;
+                            imagesContainer.appendChild(img);
+                        });
+                    }
+                })
+                .catch(error => console.error('Error fetching course details:', error));
+        }
+    </script>
+    
+</body>
+</html>
